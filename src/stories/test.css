@@ -1,0 +1,294 @@
+.structured-generation {
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 12px;
+    width: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+  
+  .empty-state {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: 40px;
+    color: #9e9e9e;
+    font-size: 14px;
+    padding-left: 8px;
+  }
+  
+  .fields-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .field-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .field-textarea {
+    flex-grow: 1;
+    min-height: 60px;
+    padding: 8px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    resize: vertical;
+    font-family: inherit;
+    font-size: 14px;
+  }
+  
+  .field-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .bottom-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  
+  .action-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 28px;
+    height: 28px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    background-color: white;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .action-button:hover {
+    background-color: #f5f5f5;
+  }
+  
+  .action-button span {
+    font-size: 16px;
+    line-height: 1;
+    color: #757575;
+  }
+  
+  .add-button span {
+    font-weight: bold;
+  }
+  
+  .help-button span {
+    font-weight: normal;
+    font-style: italic;
+  }
+  
+  .delete-button:hover {
+    background-color: #ffebee;
+  }
+  
+  .delete-button:hover span {
+    color: #f44336;
+  }
+
+
+.value-type-popover {
+  position: fixed;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  width: 200px;
+  z-index: 1000;
+  padding: 12px;
+}
+
+.popover-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.type-option {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-bottom: 4px;
+  transition: filter 0.2s;
+}
+
+.type-option:hover {
+  filter: brightness(0.95);
+}
+
+.type-icon {
+  margin-right: 8px;
+  font-size: 16px;
+}
+
+.type-label {
+  font-size: 14px;
+  color: #333;
+}
+
+
+.field-input-container {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.field-input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.field-type-indicator {
+  background: #f0f0f0;
+  padding: 6px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #666;
+  min-width: 30px;
+  text-align: center;
+}
+
+.field-name-input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.field-name-input:focus {
+  border-color: #007bff;
+}
+
+.field-instruction-input {
+  flex: 2;
+  padding: 8px 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.field-instruction-input:focus {
+  border-color: #007bff;
+}
+
+.field-name-input::placeholder,
+.field-instruction-input::placeholder {
+  color: #999;
+}
+
+.more-options-container {
+  position: relative;
+}
+
+.more-button span {
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 0.5;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dropdown-menu .action-button {
+  margin: 0;
+}
+
+.dropdown-menu button {
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+}
+
+.dropdown-menu button:hover {
+  background-color: #f5f5f5;
+}
+
+.instruction-input-container {
+  position: relative;
+  flex: 2;
+}
+
+.tooltip {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 4px;
+  padding: 8px 12px;
+  background-color: #333;
+  color: white;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.tooltip::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 8px;
+  height: 8px;
+  background-color: #333;
+}
+
+.nested-fields {
+  margin-left: 24px;
+  padding-left: 12px;
+  border-left: 2px solid #e0e0e0;
+  margin-top: 8px;
+}
+
+.empty-nested-state {
+  color: #9e9e9e;
+  font-size: 14px;
+  padding: 8px 0;
+}
+
+.nested-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.field-container {
+  margin-bottom: 12px;
+}
+
+.remove-button span {
+  font-family: monospace;
+  font-size: 14px;
+}
