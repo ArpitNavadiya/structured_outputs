@@ -1,5 +1,3 @@
-
-
 /** @type { import('@storybook/react-webpack5').StorybookConfig } */
 const config = {
   "stories": [
@@ -17,7 +15,7 @@ const config = {
     "options": {}
   },
   "staticDirs": [
-    "..\\public"
-  ]
+    "../public"
+  ] // Changed from "..\\public" to "../public"
 };
 export default config;
