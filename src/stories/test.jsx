@@ -32,7 +32,7 @@ const ValueTypePopover = ({ onSelect, onClose, position }) => {
           className="type-option"
           style={{ backgroundColor: type.color }}
           onClick={() => {
-            onSelect(type.id);
+            onSelect(type.id, 'value'); // Pass 'value' to indicate this is from value popover
             onClose();
           }}
         >
@@ -65,7 +65,7 @@ const LogicTypePopover = ({ onSelect, onClose, position }) => {
     { id: 'text', label: 'Text', icon: '[AB]', color: '#ebf9f0' },
     { id: 'number', label: 'Number', icon: '[123]', color: '#fde7e7' },
     { id: 'boolean', label: 'True/False', icon: '[0/1]', color: '#e8f0fe' },
-    { id: 'object', label: 'Object', icon: '[{}]', color: '#fff8e1' }
+    { id: 'object', label: 'Object', icon: '[ { } ]', color: '#fff8e1' }
   ];
 
   return (
@@ -77,7 +77,7 @@ const LogicTypePopover = ({ onSelect, onClose, position }) => {
           className="type-option"
           style={{ backgroundColor: type.color }}
           onClick={() => {
-            onSelect(type.id);
+            onSelect(type.id, 'logic'); // Pass 'logic' to indicate this is from logic popover
             onClose();
           }}
         >
@@ -106,14 +106,26 @@ const FieldInput = ({ field, onChange, onDuplicate, onDelete }) => {
     };
   }, []);
 
-  // Updated field type indicators with the specified format
-  const getFieldTypeIndicator = (type) => {
-    switch(type) {
-      case 'text': return '[AB]';
-      case 'number': return '[123]';
-      case 'boolean': return '[0/1]';
-      case 'object': return '[{}]';
-      default: return '[{}]';
+  // Updated field type indicators with different formats based on source
+  const getFieldTypeIndicator = (type, source) => {
+    if (source === 'logic') {
+      // For logic popover selections, use brackets
+      switch(type) {
+        case 'text': return '[AB]';
+        case 'number': return '[123]';
+        case 'boolean': return '[0/1]';
+        case 'object': return '[ { } ]';
+        default: return '[ { } ]';
+      }
+    } else {
+      // For value popover selections, don't use brackets
+      switch(type) {
+        case 'text': return 'AB';
+        case 'number': return '123';
+        case 'boolean': return '0/1';
+        case 'object': return '{ }';
+        default: return '{ }';
+      }
     }
   };
 
@@ -121,7 +133,7 @@ const FieldInput = ({ field, onChange, onDuplicate, onDelete }) => {
     <div className="field-input-container">
       <div className="field-input-row">
         <div className="field-type-indicator">
-          {getFieldTypeIndicator(field.type)}
+          {getFieldTypeIndicator(field.type, field.source)}
         </div>
         <input
           type="text"
@@ -183,8 +195,22 @@ const Test = ({ initialValue = '', onChange }) => {
   const [showTypePopover, setShowTypePopover] = useState(false);
   const [showLogicPopover, setShowLogicPopover] = useState(false);
   const [popoverPosition, setPopoverPosition] = useState({ x: 0, y: 0 });
+  const [isToggled, setIsToggled] = useState(false); // State for toggle button
+  const [textAreaContent, setTextAreaContent] = useState(''); // State for text area content
 
   const [activeParentId, setActiveParentId] = useState(null);
+
+  const handleToggle = () => {
+    setIsToggled(!isToggled);
+  };
+
+  const handleTextAreaChange = (e) => {
+    setTextAreaContent(e.target.value);
+    // You can also call the parent onChange here if needed
+    if (onChange) {
+      onChange(e.target.value);
+    }
+  };
 
   const handleAddClick = (event, parentId = null) => {
     const buttonRect = event.currentTarget.getBoundingClientRect();
@@ -206,17 +232,15 @@ const Test = ({ initialValue = '', onChange }) => {
     setShowLogicPopover(true);
   };
 
-  const handleLogicTypeSelect = (type) => {
+  const handleLogicTypeSelect = (type, source) => {
     // Create the new field based on the selected type
-    // For 'object' type, always include an empty fields array
     const newField = { 
       id: Date.now(), 
       type: type,
       name: '',
       instruction: '',
       value: '',
-      // Always include an empty fields array regardless of type
-      // This will prevent the "length of undefined" error
+      source: source, // Store whether this came from logic or value popover
       fields: []
     };
 
@@ -250,7 +274,7 @@ const Test = ({ initialValue = '', onChange }) => {
     setActiveParentId(null); // Reset the active parent ID
   };
 
-  const handleTypeSelect = (type) => {
+  const handleTypeSelect = (type, source) => {
     // Create the new field with fields array for all types for consistency
     const newField = { 
       id: Date.now(), 
@@ -258,7 +282,7 @@ const Test = ({ initialValue = '', onChange }) => {
       name: '',
       instruction: '',
       value: '',
-      // Include empty fields array for all types
+      source: source, // Store whether this came from logic or value popover
       fields: []
     };
 
@@ -358,11 +382,6 @@ const Test = ({ initialValue = '', onChange }) => {
     }
   };
 
-  const showHelp = () => {
-    // Implement help functionality
-    alert("This is a structured generation component. Add fields using the '+' button.");
-  };
-
   const handleSimpleFieldChange = (id, updatedField) => {
     const updatedFields = fields.map(field => 
       field.id === id ? { ...field, ...updatedField } : field
@@ -374,17 +393,36 @@ const Test = ({ initialValue = '', onChange }) => {
     }
   };
 
+  const getNestingLevel = (field) => {
+    if (!field.fields || field.fields.length === 0) {
+      return 1;
+    }
+    return 1 + Math.max(...field.fields.map(getNestingLevel));
+  };
+
   const handleAddNestedObject = (parentId = null) => {
     const newField = { 
       id: Date.now(),
       type: 'object',
       name: '',
       instruction: '',
-      fields: [],
-      parentId: parentId
+      fields: [], // Ensure fields is initialized as an empty array
+      parentId: parentId,
+      source: 'value' // Default to value format for objects added via the dedicated button
     };
-    
+  
     if (parentId) {
+      // Find the parent field to check its nesting level
+      const parentField = fields.find(field => field.id === parentId);
+      if (parentField) {
+        const currentNestingLevel = getNestingLevel(parentField);
+  
+        if (currentNestingLevel >= 5) {
+          alert("Maximum nesting level of 5 reached.");
+          return;
+        }
+      }
+  
       // Add to nested fields - recursively update the fields structure
       setFields(prevFields => {
         const updateFieldsRecursively = (fields) => {
@@ -504,39 +542,53 @@ const Test = ({ initialValue = '', onChange }) => {
 
   return (
     <div className="structured-generation">
-      {showEmptyState ? (
-        <div className="empty-state">
-          <p>No fields</p>
-        </div>
-      ) : (
+      <button 
+        className={`toggle-button ${isToggled ? 'toggled' : ''}`} 
+        onClick={handleToggle}
+      >
+        {/* Toggle button without text */}
+      </button>
+      
+      {isToggled ? (
+        // When toggle is ON, show fields
         <div className="fields-container">
           {fields.map(field => renderField(field))}
+          <div className="bottom-actions">
+            <button 
+              className="action-button add-button"
+              onClick={handleAddClick}
+              title="Add field"
+            >
+              <span>+</span>
+            </button>
+            <button 
+              className="action-button add-object-button"
+              onClick={() => handleAddNestedObject()}
+              title="Add nested object"
+            >
+              <span>{'{+}'}</span>
+            </button>
+            <button 
+              className="action-button help-button"
+              onClick={(e) => handleLogicClick(e)}
+              title="Logic"
+            >
+              <span>[+]</span>
+            </button>
+          </div>
+        </div>
+      ) : (
+        // When toggle is OFF, show text area instead of "No fields"
+        <div className="text-area-container">
+          <textarea
+            className="input-text-area"
+            placeholder="Enter json here..."
+            value={textAreaContent}
+            onChange={handleTextAreaChange}
+            rows={10}
+          />
         </div>
       )}
-      
-      <div className="bottom-actions">
-        <button 
-          className="action-button add-button"
-          onClick={handleAddClick}
-          title="Add field"
-        >
-          <span>+</span>
-        </button>
-        <button 
-          className="action-button add-object-button"
-          onClick={() => handleAddNestedObject()}
-          title="Add nested object"
-        >
-          <span>{'{+}'}</span>
-        </button>
-        <button 
-          className="action-button help-button"
-          onClick={(e) => handleLogicClick(e)}
-          title="Logic"
-        >
-          <span>[+]</span>
-        </button>
-      </div>
 
       {/* Value Type Popover */}
       {showTypePopover && (
