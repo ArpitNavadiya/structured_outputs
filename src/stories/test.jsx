@@ -30,7 +30,7 @@ const ValueTypePopover = ({ onSelect, onClose, position }) => {
         <div
           key={type.id}
           className="type-option"
-          style={{ backgroundColor: type.color }}
+          // REMOVE this: style={{ backgroundColor: type.color }}
           onClick={() => {
             onSelect(type.id, 'value'); // Pass 'value' to indicate this is from value popover
             onClose();
@@ -89,7 +89,7 @@ const LogicTypePopover = ({ onSelect, onClose, position }) => {
   );
 };
 
-const FieldInput = ({ field, onChange, onDuplicate, onDelete }) => {
+const FieldInput = ({ field, onChange, onDuplicate, onDelete, onToggleList }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -106,9 +106,18 @@ const FieldInput = ({ field, onChange, onDuplicate, onDelete }) => {
     };
   }, []);
 
-  // Updated field type indicators with different formats based on source
-  const getFieldTypeIndicator = (type, source) => {
-    if (source === 'logic') {
+  // Updated field type indicators with different formats based on source and list
+  const getFieldTypeIndicator = (type, source, isList) => {
+    if (isList) {
+      // List mode: show with brackets
+      switch(type) {
+        case 'text': return '[AB]';
+        case 'number': return '[123]';
+        case 'boolean': return '[0/1]';
+        case 'object': return '[ { } ]';
+        default: return '[ { } ]';
+      }
+    } else if (source === 'logic') {
       // For logic popover selections, use brackets
       switch(type) {
         case 'text': return '[AB]';
@@ -131,25 +140,22 @@ const FieldInput = ({ field, onChange, onDuplicate, onDelete }) => {
 
   return (
     <div className="field-input-container">
-      <div className="field-input-row">
-        <div className="field-type-indicator">
-          {getFieldTypeIndicator(field.type, field.source)}
+      <div className="field-input-header">
+        <div className="field-type-label-group">
+          <span className="field-type-indicator">{getFieldTypeIndicator(field.type, field.source, field.isList)}</span>
+          <span className="field-type-label">
+            {field.type === 'text' ? 'Text' : field.type === 'number' ? 'Numbers' : field.type === 'boolean' ? 'Boolean' : field.type === 'object' ? 'Object' : ''}
+          </span>
         </div>
-        <input
-          type="text"
-          className="field-name-input"
-          placeholder="Field name"
-          value={field.name || ''}
-          onChange={(e) => onChange(field.id, { ...field, name: e.target.value })}
-        />
-        <input
-          type="text"
-          className="field-instruction-input"
-          placeholder="Field Instruction (optional)"
-          value={field.instruction || ''}
-          onChange={(e) => onChange(field.id, { ...field, instruction: e.target.value })}
-        />
-        <div className="field-actions">
+        <div className="field-header-actions">
+          <span className="toggle-list-label">List</span>
+          <button
+            className={`toggle-list-button${field.isList ? ' toggled' : ''}`}
+            title={field.isList ? "Convert to single value" : "Convert to list"}
+            onClick={() => onToggleList(field.id)}
+          >
+            <span className="toggle-slider" />
+          </button>
           <div className="more-options-container" ref={dropdownRef}>
             <button 
               className="action-button more-button"
@@ -185,32 +191,61 @@ const FieldInput = ({ field, onChange, onDuplicate, onDelete }) => {
           </div>
         </div>
       </div>
+      <div className="field-input-fields">
+        <input
+          type="text"
+          className="field-name-input"
+          placeholder="Field name"
+          value={field.name || ''}
+          onChange={(e) => onChange(field.id, { ...field, name: e.target.value })}
+        />
+        <input
+          type="text"
+          className="field-instruction-input"
+          placeholder="Field Instruction (optional)"
+          value={field.instruction || ''}
+          onChange={(e) => onChange(field.id, { ...field, instruction: e.target.value })}
+        />
+      </div>
     </div>
   );
 };
 
 const Test = ({ initialValue = '', onChange }) => {
-  const [fields, setFields] = useState([]);
+  const [fields, setFields] = useState([
+    { id: Date.now(), type: 'object', name: '', instruction: '', value: '', source: 'value', fields: [] }
+  ]);
   const [showEmptyState, setShowEmptyState] = useState(true);
   const [showTypePopover, setShowTypePopover] = useState(false);
   const [showLogicPopover, setShowLogicPopover] = useState(false);
   const [popoverPosition, setPopoverPosition] = useState({ x: 0, y: 0 });
-  const [isToggled, setIsToggled] = useState(false); // State for toggle button
-  const [textAreaContent, setTextAreaContent] = useState(''); // State for text area content
+// activeParentId is already declared above, removing duplicate declaration
 
+  // Add this function to handle toggling the isList property
+  const handleToggleList = (fieldId) => {
+    setFields(prevFields => {
+      const toggleListRecursively = (fields) => {
+        return fields.map(field => {
+          if (field.id === fieldId) {
+            return { ...field, isList: !field.isList };
+          } else if (field.fields && field.fields.length > 0) {
+            return { ...field, fields: toggleListRecursively(field.fields) };
+          }
+          return field;
+        });
+      };
+      return toggleListRecursively(prevFields);
+    });
+  };
+
+  // Remove isToggled and textAreaContent states
+  // const [isToggled, setIsToggled] = useState(false);
+  // const [textAreaContent, setTextAreaContent] = useState('');
   const [activeParentId, setActiveParentId] = useState(null);
 
-  const handleToggle = () => {
-    setIsToggled(!isToggled);
-  };
-
-  const handleTextAreaChange = (e) => {
-    setTextAreaContent(e.target.value);
-    // You can also call the parent onChange here if needed
-    if (onChange) {
-      onChange(e.target.value);
-    }
-  };
+  // Remove handleToggle and handleTextAreaChange functions
+  // const handleToggle = () => { ... }
+  // const handleTextAreaChange = (e) => { ... }
 
   const handleAddClick = (event, parentId = null) => {
     const buttonRect = event.currentTarget.getBoundingClientRect();
@@ -502,10 +537,10 @@ const Test = ({ initialValue = '', onChange }) => {
         onChange={handleFieldChange}
         onDuplicate={duplicateField}
         onDelete={deleteField}
+        onToggleList={handleToggleList}
       />
       {field.type === 'object' && (
         <div className="nested-fields">
-          {/* Make sure we're checking that field.fields exists and has entries */}
           {!field.fields || field.fields.length === 0 ? (
             <div className="empty-nested-state">No fields in object</div>
           ) : (
@@ -527,13 +562,7 @@ const Test = ({ initialValue = '', onChange }) => {
             >
               <span>{'{+}'}</span>
             </button>
-            <button 
-              className="action-button remove-button"
-              onClick={(e) => handleLogicClick(e, field.id)}
-              title="Logic"
-            >
-              <span>[+]</span>
-            </button>
+            {/* Removed the third button */}
           </div>
         </div>
       )}
@@ -542,54 +571,29 @@ const Test = ({ initialValue = '', onChange }) => {
 
   return (
     <div className="structured-generation">
-      <button 
-        className={`toggle-button ${isToggled ? 'toggled' : ''}`} 
-        onClick={handleToggle}
-      >
-        {/* Toggle button without text */}
-      </button>
-      
-      {isToggled ? (
-        // When toggle is ON, show fields
-        <div className="fields-container">
-          {fields.map(field => renderField(field))}
-          <div className="bottom-actions">
-            <button 
-              className="action-button add-button"
-              onClick={handleAddClick}
-              title="Add field"
-            >
-              <span>+</span>
-            </button>
-            <button 
-              className="action-button add-object-button"
-              onClick={() => handleAddNestedObject()}
-              title="Add nested object"
-            >
-              <span>{'{+}'}</span>
-            </button>
-            <button 
-              className="action-button help-button"
-              onClick={(e) => handleLogicClick(e)}
-              title="Logic"
-            >
-              <span>[+]</span>
-            </button>
-          </div>
+      <div className="fields-container">
+        {fields.length === 0 && (
+          <div className="empty-state">No fields</div>
+        )}
+        {fields.map(field => renderField(field))}
+        <div className="bottom-actions">
+          <button 
+            className="action-button add-button"
+            onClick={handleAddClick}
+            title="Add field"
+          >
+            <span>+</span>
+          </button>
+          <button 
+            className="action-button add-object-button"
+            onClick={() => handleAddNestedObject()}
+            title="Add nested object"
+          >
+            <span>{'{+}'}</span>
+          </button>
+          {/* Removed the third button */}
         </div>
-      ) : (
-        // When toggle is OFF, show text area instead of "No fields"
-        <div className="text-area-container">
-          <textarea
-            className="input-text-area"
-            placeholder="Enter json here..."
-            value={textAreaContent}
-            onChange={handleTextAreaChange}
-            rows={10}
-          />
-        </div>
-      )}
-
+      </div>
       {/* Value Type Popover */}
       {showTypePopover && (
         <ValueTypePopover
@@ -598,7 +602,6 @@ const Test = ({ initialValue = '', onChange }) => {
           onClose={() => setShowTypePopover(false)}
         />
       )}
-
       {/* Logic Type Popover */}
       {showLogicPopover && (
         <LogicTypePopover

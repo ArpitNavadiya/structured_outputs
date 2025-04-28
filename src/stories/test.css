@@ -1,138 +1,31 @@
+body {
+  background: #181818;
+  color: #f5f5f5;
+}
+
 .structured-generation {
-    border: 1px solid #e0e0e0;
-    border-radius: 6px;
-    padding: 12px;
-    width: 100%;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  }
-  
-  .empty-state {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    height: 40px;
-    color: #9e9e9e;
-    font-size: 14px;
-    padding-left: 8px;
-  }
-  
-  .fields-container {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-  
-  .field-row {
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
-  }
-  
-  .field-textarea {
-    flex-grow: 1;
-    min-height: 60px;
-    padding: 8px;
-    border: 1px solid #e0e0e0;
-    border-radius: 4px;
-    resize: vertical;
-    font-family: inherit;
-    font-size: 14px;
-  }
-  
-  .field-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-  
-  .bottom-actions {
-    display: flex;
-    gap: 8px;
-    margin-top: 12px;
-  }
-  
-  .action-button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 28px;
-    height: 28px;
-    border: 1px solid #e0e0e0;
-    border-radius: 4px;
-    background-color: white;
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
-  
-  .action-button:hover {
-    background-color: #f5f5f5;
-  }
-  
-  .action-button span {
-    font-size: 16px;
-    line-height: 1;
-    color: #757575;
-  }
-  
-  .add-button span {
-    font-weight: bold;
-  }
-  
-  .help-button span {
-    font-weight: normal;
-    font-style: italic;
-  }
-  
-  .delete-button:hover {
-    background-color: #ffebee;
-  }
-  
-  .delete-button:hover span {
-    color: #f44336;
-  }
-
-
-.value-type-popover {
-  position: fixed;
-  background: white;
+  border: 1px solid #232323;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  width: 200px;
-  z-index: 1000;
-  padding: 12px;
+  padding: 16px;
+  width: 380px; /* Reduced width */
+  background: #232323;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  color: #f5f5f5;
+  margin: 40px auto;
 }
 
-.popover-title {
-  font-size: 14px;
-  font-weight: 500;
-  color: #333;
-  margin-bottom: 8px;
-}
-
-.type-option {
+.fields-container {
   display: flex;
-  align-items: center;
-  padding: 8px;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field-container {
+  margin-bottom: 12px;
+  background: #181818;
   border-radius: 6px;
-  cursor: pointer;
-  margin-bottom: 4px;
-  transition: filter 0.2s;
+  padding: 16px; /* Added padding for inner spacing */
 }
-
-.type-option:hover {
-  filter: brightness(0.95);
-}
-
-.type-icon {
-  margin-right: 8px;
-  font-size: 16px;
-}
-
-.type-label {
-  font-size: 14px;
-  color: #333;
-}
-
 
 .field-input-container {
   width: 100%;
@@ -146,47 +39,205 @@
   width: 100%;
 }
 
+.field-input-row.vertical-layout {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  width: 100%;
+}
+
+.field-type-indicator-with-line {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
 .field-type-indicator {
-  background: #f0f0f0;
-  padding: 6px 8px;
+  background: #232323;
+  padding: 6px 12px;
+  border-radius: 4px 4px 0 0;
+  font-size: 13px;
+  color: #bdbdbd;
+  min-width: 30px;
+  text-align: left;
+  border: 1px solid #333;
+  border-bottom: none;
+}
+
+.field-type-divider {
+  width: 100%;
+  height: 1px;
+  background: #333;
+  margin-bottom: 10px;
+  border-radius: 1px;
+}
+
+.field-input-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.field-toggle-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+.field-input-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.field-type-label-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.field-type-indicator {
+  background: #232323;
+  padding: 6px 12px;
   border-radius: 4px;
-  font-size: 12px;
-  color: #666;
+  font-size: 13px;
+  color: #bdbdbd;
   min-width: 30px;
   text-align: center;
+  border: 1px solid #333;
+  margin-right: 4px;
 }
 
-.field-name-input {
-  flex: 1;
-  padding: 8px 12px;
-  border: 1px solid #e0e0e0;
+.field-type-label {
+  font-size: 15px;
+  color: #f5f5f5;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.field-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.field-type-indicator {
+  background: #232323;
+  padding: 6px 8px;
   border-radius: 4px;
-  font-size: 14px;
-  outline: none;
-  transition: border-color 0.2s;
+  font-size: 13px;
+  color: #bdbdbd;
+  min-width: 30px;
+  text-align: center;
+  border: 1px solid #333;
 }
 
-.field-name-input:focus {
-  border-color: #007bff;
-}
-
+.field-name-input,
 .field-instruction-input {
-  flex: 2;
-  padding: 8px 12px;
-  border: 1px solid #e0e0e0;
+  background: #232323;
+  color: #f5f5f5;
+  border: 1px solid #333;
   border-radius: 4px;
   font-size: 14px;
   outline: none;
   transition: border-color 0.2s;
+  padding: 8px 12px;
 }
 
+.field-name-input:focus,
 .field-instruction-input:focus {
-  border-color: #007bff;
+  border-color: #90caf9;
 }
 
 .field-name-input::placeholder,
 .field-instruction-input::placeholder {
-  color: #999;
+  color: #888;
+}
+
+.toggle-list-label {
+  margin-left: 2px;
+  font-size: 13px;
+  color: #bdbdbd;
+  user-select: none;
+}
+
+.toggle-list-button {
+  width: 36px;
+  height: 20px;
+  background-color: #232323;
+  border: none;
+  border-radius: 4px; /* Changed from 10px to 4px for squarer corners */
+  cursor: pointer;
+  position: relative;
+  transition: none; /* Remove or override background-color transition */
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 4px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.toggle-list-button.toggled {
+  background-color: #ff9800;
+  justify-content: flex-end;
+}
+
+.toggle-slider {
+  width: 16px;
+  height: 16px;
+  background: #181818;
+  border-radius: 3px; /* Changed from 50% to 3px for squarer knob */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+  transition: none; /* Remove background transition for instant color change */
+}
+
+.toggle-list-button.toggled .toggle-slider {
+  background: #fff3e0;
+}
+
+.action-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid #333;
+  border-radius: 4px;
+  background-color: #232323;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  color: #bdbdbd;
+}
+
+.action-button:hover {
+  background-color: #333;
+}
+
+.action-button span {
+  font-size: 16px;
+  line-height: 1;
+  color: #bdbdbd;
+}
+
+.add-button span {
+  font-weight: bold;
+}
+
+.help-button span {
+  font-weight: normal;
+  font-style: italic;
+}
+
+.delete-button:hover {
+  background-color: #3a2323;
+}
+
+.delete-button:hover span {
+  color: #ff5252;
 }
 
 .more-options-container {
@@ -203,10 +254,10 @@
   position: absolute;
   top: 100%;
   right: 0;
-  background: white;
-  border: 1px solid #e0e0e0;
+  background: #232323;
+  border: 1px solid #333;
   border-radius: 4px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   z-index: 1000;
   padding: 4px;
   display: flex;
@@ -226,56 +277,73 @@
   text-align: left;
   cursor: pointer;
   font-size: 14px;
-  color: #333;
+  color: #f5f5f5;
 }
 
 .dropdown-menu button:hover {
-  background-color: #f5f5f5;
-}
-
-.instruction-input-container {
-  position: relative;
-  flex: 2;
-}
-
-.tooltip {
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  margin-top: 4px;
-  padding: 8px 12px;
   background-color: #333;
-  color: white;
-  border-radius: 4px;
-  font-size: 12px;
-  white-space: nowrap;
+}
+
+.value-type-popover {
+  position: fixed;
+  background: #181818;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  width: 170px; /* Reduced from 220px */
   z-index: 1000;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  padding: 8px; /* Reduced from 12px */
+  border: 1px solid #333;
+  color: #fff;
 }
 
-.tooltip::before {
-  content: '';
-  position: absolute;
-  top: -4px;
-  left: 50%;
-  transform: translateX(-50%) rotate(45deg);
-  width: 8px;
-  height: 8px;
-  background-color: #333;
+.popover-title {
+  font-size: 13px; /* Reduced from 14px */
+  font-weight: 500;
+  color: #f5f5f5;
+  margin-bottom: 6px; /* Reduced from 8px */
+}
+
+.type-option {
+  display: flex;
+  align-items: center;
+  padding: 5px 8px; /* Reduced from 8px */
+  border-radius: 6px;
+  cursor: pointer;
+  margin-bottom: 3px; /* Reduced from 4px */
+  transition: filter 0.2s, background 0.2s;
+  background: #181818;
+  color: #fff;
+  font-size: 13px; /* Reduced from 14px */
+  min-height: 28px; /* Optional: ensures smaller height */
+}
+
+.type-icon {
+  margin-right: 6px; /* Reduced from 8px */
+  font-size: 15px; /* Reduced from 16px */
+}
+
+.type-label {
+  font-size: 13px; /* Reduced from 14px */
+  color: #f5f5f5;
 }
 
 .nested-fields {
   margin-left: 24px;
   padding-left: 12px;
-  border-left: 2px solid #e0e0e0;
+  border-left: 2px solid #333;
   margin-top: 8px;
 }
 
 .empty-nested-state {
-  color: #9e9e9e;
+  color: #888;
   font-size: 14px;
   padding: 8px 0;
+}
+
+.bottom-actions {
+  display: flex;
+  gap: 8px; 
+  margin-top: 8px;
 }
 
 .nested-actions {
@@ -284,80 +352,50 @@
   margin-top: 8px;
 }
 
-.field-container {
-  margin-bottom: 12px;
-}
-
-.remove-button span {
-  font-family: monospace;
-  font-size: 14px;
-}
-
-.toggle-container {
-  position: relative;
-  width: 50px; /* Adjust width as needed */
-  height: 25px; /* Adjust height as needed */
-  border: 1px solid #e0e0e0; /* Optional border for the box */
-  border-radius: 12.5px; /* Match the toggle button's border radius */
-  background-color: #f5f5f5; /* Background color for the box */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.toggle-button {
-  width: 40px; /* Width of the toggle button */
-  height: 20px; /* Height of the toggle button */
-  background-color: #c7e2ff;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 0 5px; /* Adjust padding for better fit */
-}
-
-.toggle-button::before {
-  content: '';
-  width: 16px;
-  height: 16px;
-  background-color: white;
-  border-radius: 50%;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  transition: transform 0.3s;
-  transform: translateX(0);
-}
-
-.toggle-button.toggled {
-  justify-content: flex-end;
-}
-
-.toggle-button.toggled::before {
-  transform: translateX(1px);
-}
-
-.toggle-button:hover {
-  background-color: #b3d8ff;
-}
-
-.toggle-button:active {
-  background-color: #c7e2ff;
-}
-
 .input-text-area {
-  width: 100%; /* Make the textarea fit the box width */
-  border: 1px solid #e0e0e0; /* Match the box border color */
-  border-radius: 6px; /* Match the box border radius */
-  padding: 8px; /* Add some padding for better text visibility */
-  box-sizing: border-box; /* Ensure padding doesn't affect the width */
-  resize: vertical; /* Allow vertical resizing */
-  font-family: inherit; /* Use the same font as the rest of the app */
-  font-size: 14px; /* Match the font size */
+  width: 100%;
+  border: 1px solid #333;
+  border-radius: 6px;
+  padding: 8px;
+  box-sizing: border-box;
+  resize: vertical;
+  font-family: inherit;
+  font-size: 14px;
+  background: #232323;
+  color: #f5f5f5;
 }
 
-/* Remove focus-specific styles */
 .input-text-area:focus {
-  outline: none; /* Remove the default focus outline */
+  outline: none;
+  border-color: #90caf9;
+}
+
+.empty-state {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  color: #888;
+  font-size: 16px;
+  font-style: italic;
+  padding-left: 8px;
+  background: #232323;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+.type-dropdown-button {
+  background: none;
+  border: none;
+  padding: 0 4px 0 0;
+  margin-right: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: #bdbdbd;
+}
+
+.type-dropdown-icon {
+  font-size: 16px;
+  display: flex;
+  align-items: center;
 }
