@@ -11,7 +11,10 @@ body {
   background: #232323;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   color: #f5f5f5;
-  margin: 40px auto;
+  margin: 40px auto; /* 'auto' for left/right margins centers it horizontally */
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .fields-container {
@@ -112,26 +115,31 @@ body {
   display: flex;
   align-items: center;
   gap: 2px; /* Reduce this value to move the label closer to the arrow */
+  flex-direction: row; /* Ensure horizontal layout */
 }
 
 .field-type-label {
-  margin-left: -10px; /* Remove or reduce left margin */
-
+  order: 1; /* Make label appear first */
+  margin-left: 0; /* Remove negative margin */
   font-size: 15px;
   color: #f5f5f5;
   font-weight: 500;
   letter-spacing: 0.02em;
+}
+
+.field-type-arrow-btn {
+  order: 2; /* Make arrow button appear second */
+  margin-right: 4px;
+  margin-left: 4px; /* Add left margin to create space after label */
+}
+
+.field-type-indicator {
+  order: 3; /* Make indicator appear third */
 }
 .field-header-actions {
   display: flex;
   align-items: center;
   gap: 8px;
-}
-.field-type-label {
-  font-size: 15px;
-  color: #f5f5f5;
-  font-weight: 500;
-  letter-spacing: 0.02em;
 }
 .field-header-actions {
   display: flex;
@@ -429,12 +437,7 @@ body {
   letter-spacing: 0.01em;
   vertical-align: middle;
 }
-.field-type-label {
-  font-size: 15px;
-  color: #f5f5f5;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-}
+
 .field-header-actions {
   display: flex;
   align-items: center;
@@ -501,17 +504,17 @@ body {
 .field-type-arrow-btn svg {
   display: block;
 }
-.field-type-label-group {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+
+
+.field-type-arrow-btn {
+  order: 2;
+  margin-right: 4px;
 }
-.field-type-label {
-  font-size: 15px;
-  color: #f5f5f5;
-  font-weight: 500;
-  letter-spacing: 0.02em;
+
+.field-type-indicator {
+  order: 3;
 }
+
 .field-header-actions {
   display: flex;
   align-items: center;

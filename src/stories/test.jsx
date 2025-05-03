@@ -110,12 +110,17 @@ const FieldInput = ({ field, onChange, onDuplicate, onDelete, onToggleList, onTy
     if (e.key === 'Enter' && field.type === 'object' && fieldName.trim() !== '') {
       e.preventDefault();
       
-      // Store just the hierarchyPath without duplicating names
+      // Construct the full hierarchy path without duplications
       let hierarchyPath = '';
       
-      // If parent field has a hierarchyPath, use it, otherwise use the parent name
+      // Check if parent name is already in the path
       if (field.hierarchyPath) {
-        hierarchyPath = field.hierarchyPath;
+        const pathParts = field.hierarchyPath.split(' → ');
+        if (pathParts[pathParts.length - 1] !== field.name) {
+          hierarchyPath = `${field.hierarchyPath} → ${field.name}`;
+        } else {
+          hierarchyPath = field.hierarchyPath;
+        }
       } else if (field.name) {
         hierarchyPath = field.name;
       }
@@ -129,19 +134,19 @@ const FieldInput = ({ field, onChange, onDuplicate, onDelete, onToggleList, onTy
         parentId: null,
         source: 'value',
         showSingleField: true,
-        isDetached: true,  // Add this flag to identify detached objects
-        // Add parent name information with full hierarchy
-        hierarchyPath: hierarchyPath
+        isDetached: true,
+        hierarchyPath: hierarchyPath,
+        isList: field.isList // Pass the list state to the new object
       };
       
-      // If the toggle is on (isList is true), add a single field to the detached object
+      // Only add an item field if it's a list but DON'T make it an object type 
+      // to prevent double nesting
       if (field.isList) {
         newNestedObject.fields = [{
           id: Date.now() + 1,
-          type: 'object',  // Changed from 'text' to 'object'
+          type: 'text', // Changed from 'object' to 'text' to avoid double nesting
           name: 'item',
           instruction: '',
-          fields: [],
           parentId: newNestedObject.id,
           source: 'value',
           showSingleField: true
@@ -189,8 +194,24 @@ const FieldInput = ({ field, onChange, onDuplicate, onDelete, onToggleList, onTy
 
   // If this is a detached object, render a simplified version without controls
   if (field.isDetached) {
-    // For detached objects, display the hierarchyPath + current name without duplication
-    const displayName = field.hierarchyPath ? `${field.hierarchyPath} → ${field.name}` : field.name;
+    // For detached objects, display without duplicating the name
+    // Create a clean path and don't duplicate the current field name
+    let displayName = field.name;
+    
+    if (field.hierarchyPath) {
+      // Clean up the hierarchy path to remove duplicates
+      const cleanPath = field.hierarchyPath.split(' → ')
+        .filter((name, index, array) => array.indexOf(name) === index)
+        .join(' → ');
+      
+      // Check if the field name is already the last part of the path
+      const parts = cleanPath.split(' → ');
+      if (parts[parts.length - 1] !== field.name) {
+        displayName = `${cleanPath} → ${field.name}`;
+      } else {
+        displayName = cleanPath;
+      }
+    }
     
     return (
       <div className="field-input-container detached-object">
@@ -207,23 +228,32 @@ const FieldInput = ({ field, onChange, onDuplicate, onDelete, onToggleList, onTy
   return (
     <div className="field-input-container">
       <div className="field-input-header">
-        <div className="field-type-label-group">
+        <div className="field-type-label-group" style={{ display: 'flex', flexDirection: 'row' }}>
+          <span className="field-type-label" style={{ order: 1, marginRight: '8px' }}>
+            {field.type === 'text' ? 'Text' : field.type === 'number' ? 'Numbers' : field.type === 'boolean' ? 'Boolean' : field.type === 'object' ? 'Object' : ''}
+          </span>
+          <span className="field-type-indicator" style={{ 
+            order: 2, 
+            marginRight: '4px', 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center' 
+          }}>
+            {getFieldTypeIndicator(field.type, field.source, field.isList)}
+          </span>
           <button 
             className="field-type-arrow-btn" 
             title="Change field type"
             onClick={(e) => typeof onTypeArrowClick === 'function' ? onTypeArrowClick(e, field.id) : null}
+            style={{ order: 3 }}
           >
             <span className="arrow-icon-bg">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="white" aria-hidden="true" width="14" height="14">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="white" aria-hidden="true" width="32" height="32">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 15.75L12 19.5l3.75-3.75" />
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 8.25L12 4.5 8.25 8.25" />
               </svg>
             </span>
           </button>
-          <span className="field-type-label">
-            {field.type === 'text' ? 'Text' : field.type === 'number' ? 'Numbers' : field.type === 'boolean' ? 'Boolean' : field.type === 'object' ? 'Object' : ''}
-          </span>
-          <span className="field-type-indicator">{getFieldTypeIndicator(field.type, field.source, field.isList)}</span>
         </div>
         <div className="field-header-actions">
           <span className="toggle-list-label">List</span>
@@ -489,7 +519,15 @@ const handleDeleteField = (id) => {
     // Special case for handling 'newObject'
     if (id === 'newObject') {
       // Create a new top-level field with the given object properties
-      setFields(prevFields => [...prevFields, updatedField]);
+      
+      // Check if this is a nested object from a list parent
+      if (updatedField.hierarchyPath && updatedField.hierarchyPath.includes('→')) {
+        // It's a nested object, so we should add it as a top-level field
+        setFields(prevFields => [...prevFields, updatedField]);
+      } else {
+        // Regular case - add as a top-level field
+        setFields(prevFields => [...prevFields, updatedField]);
+      }
       return;
     }
 
@@ -539,23 +577,38 @@ const handleDeleteField = (id) => {
     
     // Find parent with hierarchy path if parentId exists
     if (parentId) {
-      const findParentRecursively = (fields, id, currentPath = "") => {
+      const findParentRecursively = (fields, id) => {
         for (const field of fields) {
           if (field.id === id) {
-            // Return the full path including this field's name
-            return currentPath ? (currentPath + " → " + field.name) : field.name;
+            // Return this field with its own hierarchy path
+            return {
+              name: field.name,
+              hierarchyPath: field.hierarchyPath || ""
+            };
           }
           if (field.fields && field.fields.length > 0) {
-            // Build the path as we go deeper
-            const newPath = currentPath ? (currentPath + " → " + field.name) : field.name;
-            const found = findParentRecursively(field.fields, id, newPath);
+            const found = findParentRecursively(field.fields, id);
             if (found) return found;
           }
         }
-        return "";
+        return null;
       };
       
-      hierarchyPath = findParentRecursively(fields, parentId, "");
+      const parent = findParentRecursively(fields, parentId);
+      if (parent) {
+        // Check to prevent duplicate names in the path
+        if (parent.hierarchyPath) {
+          const pathParts = parent.hierarchyPath.split(' → ');
+          // If the last part of the path is not already the parent's name, add it
+          if (pathParts[pathParts.length - 1] !== parent.name) {
+            hierarchyPath = `${parent.hierarchyPath} → ${parent.name}`;
+          } else {
+            hierarchyPath = parent.hierarchyPath;
+          }
+        } else {
+          hierarchyPath = parent.name;
+        }
+      }
     }
   
     const newField = { 
@@ -565,12 +618,10 @@ const handleDeleteField = (id) => {
       instruction: '',
       fields: [],
       parentId: parentId,
-      hierarchyPath: hierarchyPath, // Store full hierarchy path
+      hierarchyPath: hierarchyPath,
       source: 'value',
       showSingleField: true
     };
-  
-    // Rest of the function remains the same...
   
     if (parentId) {
       const parentField = fields.find(field => field.id === parentId);
@@ -634,8 +685,8 @@ const handleDeleteField = (id) => {
     // Get position for the type popover
     const rect = e.currentTarget.getBoundingClientRect();
     setPopoverPosition({
-      x: rect.left,
-      y: rect.bottom + 5
+      x: rect.left - 430, // Center the popover horizontally over the button
+      y: rect.top + 10, // Position at the top of the button
     });
     
     // Store the current field ID for later use when a type is selected
@@ -645,49 +696,72 @@ const handleDeleteField = (id) => {
     setShowTypePopover(true);
   };
 
-  const renderField = (field) => (
-    <div key={field.id} className={`field-container${field.type === 'object' ? ' object-field-container' : ''}`}>
-      {field.type === 'object' && field.name && (
-  <div className="object-field-header">
-    {field.name}
-  </div>
-)}
-      <FieldInput 
-        field={field}
-        onChange={handleFieldChange}
-        onDuplicate={duplicateField}
-        onDelete={deleteField}
-        onToggleList={handleToggleList}
-        onTypeArrowClick={handleTypeArrowClick}
-      />
-      {field.type === 'object' && (
-        <div className="nested-fields">
-          {!field.fields || field.fields.length === 0 ? (
-            <div className="empty-nested-state">No fields in object</div>
-          ) : (
-            field.fields.map(nestedField => renderField(nestedField))
-          )}
-          <div className="nested-actions">
-            <button 
-              className="action-button add-button"
-              onClick={(e) => handleAddClick(e, field.id)}
-              title="Add field"
-              data-parent-id={field.id}
-            >
-              <span>+</span>
-            </button>
-            <button 
-              className="action-button add-object-button"
-              onClick={() => handleAddNestedObject(field.id)}
-              title="Add nested object"
-            >
-              <span>{'{+}'}</span>
-            </button>
+  const renderField = (field) => {
+    // Helper to create a clean display name with hierarchy
+    const getCleanDisplayName = (field) => {
+      if (!field.type === 'object' || !field.name) return field.name || '';
+      
+      // If no hierarchy path, just return the name
+      if (!field.hierarchyPath) return field.name;
+      
+      // Clean the path and check if field name is already at the end
+      const cleanPath = field.hierarchyPath.split(' → ')
+        .filter((name, index, array) => array.indexOf(name) === index)
+        .join(' → ');
+      
+      const parts = cleanPath.split(' → ');
+      if (parts[parts.length - 1] !== field.name) {
+        return `${cleanPath} → ${field.name}`;
+      } else {
+        return cleanPath;
+      }
+    };
+    
+    return (
+      <div key={field.id} className={`field-container${field.type === 'object' ? ' object-field-container' : ''}`}>
+        {/* Only show the simple object name in the header for normal objects */}
+        {field.type === 'object' && field.name && !field.isDetached && (
+          <div className="object-field-header">
+            {field.name}
           </div>
-        </div>
-      )}
-    </div>
-  );
+        )}
+        <FieldInput 
+          field={field}
+          onChange={handleFieldChange}
+          onDuplicate={duplicateField}
+          onDelete={deleteField}
+          onToggleList={handleToggleList}
+          onTypeArrowClick={handleTypeArrowClick}
+        />
+        {field.type === 'object' && (
+          <div className="nested-fields">
+            {!field.fields || field.fields.length === 0 ? (
+              <div className="empty-nested-state">No fields in object</div>
+            ) : (
+              field.fields.map(nestedField => renderField(nestedField))
+            )}
+            <div className="nested-actions">
+              <button 
+                className="action-button add-button"
+                onClick={(e) => handleAddClick(e, field.id)}
+                title="Add field"
+                data-parent-id={field.id}
+              >
+                <span>+</span>
+              </button>
+              <button 
+                className="action-button add-object-button"
+                onClick={() => handleAddNestedObject(field.id)}
+                title="Add nested object"
+              >
+                <span>{'{+}'}</span>
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
 
   return (
     <div className="structured-generation">
