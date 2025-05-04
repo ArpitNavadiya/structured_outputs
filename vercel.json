@@ -1,4 +1,17 @@
 {
-  "buildCommand": "mkdir -p public && npm run build-storybook",
-  "outputDirectory": "storybook-static"
+  "version": 2,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "bypass-static",
+        "buildCommand": "npm run build-bypass"
+      }
+    }
+  ],
+  "routes": [
+    { "handle": "filesystem" },
+    { "src": "/(.*)", "dest": "/index.html" }
+  ]
 }
