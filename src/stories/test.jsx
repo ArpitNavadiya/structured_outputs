@@ -697,14 +697,11 @@ const handleDeleteField = (id) => {
   };
 
   const renderField = (field) => {
-    // Helper to create a clean display name with hierarchy
     const getCleanDisplayName = (field) => {
       if (!field.type === 'object' || !field.name) return field.name || '';
       
-      // If no hierarchy path, just return the name
       if (!field.hierarchyPath) return field.name;
       
-      // Clean the path and check if field name is already at the end
       const cleanPath = field.hierarchyPath.split(' → ')
         .filter((name, index, array) => array.indexOf(name) === index)
         .join(' → ');
@@ -764,44 +761,89 @@ const handleDeleteField = (id) => {
   };
 
   return (
-    <div className="structured-generation">
-      <div className="fields-container">
-        {fields.length === 0 && (
-          <div className="empty-state">No fields</div>
-        )}
-        {fields.map(field => renderField(field))}
-        <div className="bottom-actions">
-          <button 
-            className="action-button add-button"
-            onClick={handleAddClick}
-            title="Add field"
-          >
-            <span>+</span>
-          </button>
-          <button 
-            className="action-button add-object-button"
-            onClick={() => handleAddNestedObject()}
-            title="Add nested object"
-          >
-            <span>{'{+}'}</span>
-          </button>
-          {/* Removed the third button */}
-        </div>
+    <div className="structured-output-wrapper">
+      <div className="structured-generation">
+        {showEmptyState ? (
+          <div className="empty-state">Click + to add a field</div>
+        ) : null}
+        {fields.map((field) => (
+          <div key={field.id} className="field-container">
+            <FieldInput
+              field={field}
+              onChange={handleFieldChange}
+              onDuplicate={duplicateField}
+              onDelete={handleDeleteField}
+              onToggleList={handleToggleList}
+              onTypeArrowClick={(e) => {
+                const rect = e.currentTarget.getBoundingClientRect();
+                setPopoverPosition({
+                  x: rect.left,
+                  y: rect.bottom
+                });
+                setCurrentFieldId(field.id);
+                setShowTypePopover(true);
+              }}
+            />
+          </div>
+        ))}
+        <button
+          className="action-button add-button"
+          onClick={(e) => handleAddClick(e)}
+          title="Add field"
+        >
+          <span>+</span>
+        </button>
       </div>
-      {/* Value Type Popover */}
+
+      {/* Nested Objects Section - Moved outside structured-generation */}
+      <div className="nested-objects-section">
+        <h3 className="nested-objects-title">Nested Objects</h3>
+        {fields.map((field) => (
+          field.type === 'object' && (
+            <div key={`nested-${field.id}`} className="nested-fields">
+              {field.fields?.map((nestedField) => (
+                <FieldInput
+                  key={nestedField.id}
+                  field={nestedField}
+                  onChange={handleFieldChange}
+                  onDuplicate={duplicateField}
+                  onDelete={handleDeleteField}
+                  onToggleList={handleToggleList}
+                  onTypeArrowClick={(e) => {
+                    const rect = e.currentTarget.getBoundingClientRect();
+                    setPopoverPosition({
+                      x: rect.left,
+                      y: rect.bottom
+                    });
+                    setCurrentFieldId(nestedField.id);
+                    setShowTypePopover(true);
+                  }}
+                />
+              ))}
+              <button
+                className="action-button add-button"
+                onClick={(e) => handleAddClick(e, field.id)}
+                title="Add nested field"
+              >
+                <span>+</span>
+              </button>
+            </div>
+          )
+        ))}
+      </div>
+
       {showTypePopover && (
         <ValueTypePopover
-          position={popoverPosition}
           onSelect={handleTypeSelect}
           onClose={() => setShowTypePopover(false)}
+          position={popoverPosition}
         />
       )}
-      {/* Logic Type Popover */}
       {showLogicPopover && (
         <LogicTypePopover
-          position={popoverPosition}
           onSelect={handleLogicTypeSelect}
           onClose={() => setShowLogicPopover(false)}
+          position={popoverPosition}
         />
       )}
     </div>

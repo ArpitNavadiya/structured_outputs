@@ -354,10 +354,13 @@ body {
   color: #f5f5f5;
 }
 .nested-fields {
-  margin-left: 24px;
-  padding-left: 12px;
-  border-left: 2px solid #333;
-  margin-top: 8px;
+  width: 100%;
+  margin-bottom: 16px;
+  padding: 16px;
+  background: #181818;
+  border-radius: 6px;
+  box-sizing: border-box;
+  position: relative;
 }
 .empty-nested-state {
   color: #888;
@@ -672,10 +675,512 @@ body {
   color: #f5f5f5;
 }
 .nested-fields {
-  margin-left: 24px;
-  padding-left: 12px;
-  border-left: 2px solid #333;
+  width: 100%;
+  margin-bottom: 16px;
+  padding: 16px;
+  background: #181818;
+  border-radius: 6px;
+  box-sizing: border-box;
+  position: relative;
+}
+.empty-nested-state {
+  color: #888;
+  font-size: 14px;
+  padding: 8px 0;
+}
+.bottom-actions {
+  display: flex;
+  gap: 8px; 
   margin-top: 8px;
+}
+.nested-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+.input-text-area {
+  width: 100%;
+  border: 1px solid #333;
+  border-radius: 6px;
+  padding: 8px;
+  box-sizing: border-box;
+  resize: vertical;
+  font-family: inherit;
+  font-size: 14px;
+  background: #232323;
+  color: #f5f5f5;
+}
+.input-text-area:focus {
+  outline: none;
+  border-color: #90caf9;
+}
+.empty-state {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  color: #888;
+  font-size: 16px;
+  font-style: italic;
+  padding-left: 8px;
+  background: #232323;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+.type-dropdown-button {
+  background: none;
+  border: none;
+  padding: 0 4px 0 0;
+  margin-right: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: #bdbdbd;
+}
+.type-dropdown-icon {
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+}
+.value-type-divider {
+  height: 1px;
+  background: #333;
+  margin: 0 0 0 0; 
+  border: none;
+  width: 100%;
+  opacity: 1; 
+}
+.type-option:hover {
+  background: #232323;
+  color: #90caf9;
+}
+
+/* Update structured-generation wrapper */
+.structured-output-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 20px;
+  gap: 20px;
+}
+
+/* Update nested objects section */
+.nested-objects-section {
+  width: 380px;
+  margin: 20px auto 0;
+  background: #232323;
+  border-radius: 8px;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.nested-objects-title {
+  color: #f5f5f5;
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 16px;
+  text-align: left;
+  width: 100%;
+  padding: 0;
+}
+
+/* Update nested fields styles */
+.nested-fields {
+  width: 100%;
+  margin-bottom: 16px;
+  padding: 16px;
+  background: #181818;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+.nested-fields .add-button {
+  margin-top: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid #333;
+  border-radius: 4px;
+  background-color: #232323;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  color: #bdbdbd;
+  z-index: 2;
+}
+
+.nested-fields .add-button:hover {
+  background-color: #333;
+}
+
+.nested-fields .add-button span {
+  font-size: 16px;
+  line-height: 1;
+  color: #bdbdbd;
+  font-weight: bold;
+}
+
+.field-container {
+  margin-bottom: 12px;
+  background: #181818;
+  border-radius: 6px;
+  padding: 16px;
+}
+
+.field-input-container {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.field-input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.field-input-row.vertical-layout {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  width: 100%;
+}
+
+.field-type-indicator-with-line {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.field-type-indicator {
+  background: #232323;
+  padding: 2px 6px;
+  border-radius: 4px 4px 4px 4px;
+  font-size: 13px;
+  color: #bdbdbd;
+  min-width: 3px;
+  min-height: 5px;
+  text-align: left;
+  border: 1px solid #333;
+  /* Remove this line: border-bottom: none; */
+}
+
+.field-type-divider {
+  width: 100%;
+  height: 1px;
+  background: #333;
+  margin: 2px 0;      /* Reduce vertical margin */
+  border: none;
+  border-radius: 1px;
+}
+
+.field-input-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.arrow-icon-bg {
+  background: #181818;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;      /* Increased width */
+  height: 24px;     /* Increased height */
+  padding: 4px;     /* Add padding for visible background */
+  box-sizing: border-box;
+}
+
+.field-toggle-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+.field-input-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.field-type-label-group {
+  display: flex;
+  align-items: center;
+  gap: 2px; /* Reduce this value to move the label closer to the arrow */
+  flex-direction: row; /* Ensure horizontal layout */
+}
+
+.field-type-label {
+  order: 1; /* Make label appear first */
+  margin-left: 0; /* Remove negative margin */
+  font-size: 15px;
+  color: #f5f5f5;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.field-type-arrow-btn {
+  order: 2; /* Make arrow button appear second */
+  margin-right: 4px;
+  margin-left: 4px; /* Add left margin to create space after label */
+}
+
+.field-type-indicator {
+  order: 3; /* Make indicator appear third */
+}
+.field-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.field-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+
+.field-name-input,
+.field-instruction-input {
+  background: #232323;
+  color: #f5f5f5;
+  border: 1px solid #333;
+  border-radius: 4px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+  padding: 8px 12px;
+}
+.field-name-input:focus,
+.field-instruction-input:focus {
+  border-color: #90caf9;
+}
+.field-name-input::placeholder,
+.field-instruction-input::placeholder {
+  color: #888;
+}
+.toggle-list-label {
+  margin-left: 2px;
+  font-size: 13px;
+  color: #bdbdbd;
+  user-select: none;
+}
+.toggle-list-button {
+  width: 36px;
+  height: 20px;
+  background-color: #232323;
+  border: none;
+  border-radius: 4px; 
+  cursor: pointer;
+  position: relative;
+  transition: background-color 0.2s linear;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 4px;
+  outline: none;
+  box-sizing: border-box;
+}
+.field-type-arrow-btn {
+  width: 24px;
+  height: 24px;
+  background: #232323;
+  border: none;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 6px;
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.2s;
+}
+.field-type-arrow-btn:hover {
+  background: #333;
+}
+.field-type-arrow-btn svg {
+  display: block;
+}
+
+
+.field-type-arrow-btn {
+  order: 2;
+  margin-right: 4px;
+}
+
+.field-type-indicator {
+  order: 3;
+}
+
+.field-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.field-name-input,
+.field-instruction-input {
+  background: #232323;
+  color: #f5f5f5;
+  border: 1px solid #333;
+  border-radius: 4px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+  padding: 8px 12px;
+}
+.field-name-input:focus,
+.field-instruction-input:focus {
+  border-color: #90caf9;
+}
+.field-name-input::placeholder,
+.field-instruction-input::placeholder {
+  color: #888;
+}
+.toggle-list-label {
+  margin-left: 2px;
+  font-size: 13px;
+  color: #bdbdbd;
+  user-select: none;
+}
+.toggle-list-button {
+  width: 36px;
+  height: 20px;
+  background-color: #232323;
+  border: none;
+  border-radius: 4px; 
+  cursor: pointer;
+  position: relative;
+  transition: background-color 0.2s linear;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 4px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+
+.action-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid #333;
+  border-radius: 4px;
+  background-color: #232323;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  color: #bdbdbd;
+}
+.action-button:hover {
+  background-color: #333;
+}
+.action-button span {
+  font-size: 16px;
+  line-height: 1;
+  color: #bdbdbd;
+}
+.add-button span {
+  font-weight: bold;
+}
+.help-button span {
+  font-weight: normal;
+  font-style: italic;
+}
+.delete-button:hover {
+  background-color: #3a2323;
+}
+.delete-button:hover span {
+  color: #ff5252;
+}
+.more-options-container {
+  position: relative;
+}
+.more-button span {
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 0.5;
+}
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: #232323;
+  border: 1px solid #333;  border-radius: 4px;
+  box-shadow: 0 8px 32px 0 rgba(0,0,0,0.65), 0 2px 12px 0 rgba(0,0,0,0.45); 
+  z-index: 1000;
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 3px; 
+}
+.dropdown-menu .action-button {
+  margin: 0;
+}
+.dropdown-menu button {
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px;
+  color: #f5f5f5;
+}
+.dropdown-menu button .dropdown-action-label {
+  margin-left: 8px; 
+}
+
+.dropdown-menu button.delete-button span:first-child {
+  margin-left: 0px; 
+  margin-right: 0px; 
+}
+.dropdown-menu button:hover {
+  background-color: #333;
+}
+
+.popover-title {
+  font-size: 13px; 
+  font-weight: 500;
+  color: #f5f5f5;
+  margin-bottom: 6px;
+}
+.type-option {
+  display: flex;
+  align-items: center;
+  padding: 5px 8px; 
+  border-radius: 6px;
+  cursor: pointer;
+  margin-bottom: 1px;
+  transition: filter 0.2s, background 0.2s;
+  background: #181818;
+  color: #fff;
+  font-size: 13px; 
+  min-height: 28px; 
+}
+.type-icon {
+  margin-right: 6px; 
+  font-size: 15px;
+}
+.type-label {
+  font-size: 13px; 
+  color: #f5f5f5;
+}
+.nested-fields {
+  width: 100%;
+  margin-bottom: 16px;
+  padding: 16px;
+  background: #181818;
+  border-radius: 6px;
+  box-sizing: border-box;
+  position: relative;
 }
 .empty-nested-state {
   color: #888;
@@ -796,30 +1301,907 @@ body {
   padding: 16px;
 }
 
-/* Style for expanded object view */
-.expanded-object {
-  margin-top: 12px;
-  padding-top: 8px;
-  border-top: 1px solid #333;
+.field-input-container {
+  width: 100%;
+  margin-bottom: 10px;
 }
 
-.detached-object {
+.field-input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.field-input-row.vertical-layout {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  width: 100%;
+}
+
+.field-type-indicator-with-line {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.field-type-indicator {
+  background: #232323;
+  padding: 2px 6px;
+  border-radius: 4px 4px 4px 4px;
+  font-size: 13px;
+  color: #bdbdbd;
+  min-width: 3px;
+  min-height: 5px;
+  text-align: left;
+  border: 1px solid #333;
+  /* Remove this line: border-bottom: none; */
+}
+
+.field-type-divider {
+  width: 100%;
+  height: 1px;
+  background: #333;
+  margin: 2px 0;      /* Reduce vertical margin */
+  border: none;
+  border-radius: 1px;
+}
+
+.field-input-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.arrow-icon-bg {
+  background: #181818;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;      /* Increased width */
+  height: 24px;     /* Increased height */
+  padding: 4px;     /* Add padding for visible background */
+  box-sizing: border-box;
+}
+
+.field-toggle-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+.field-input-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.field-type-label-group {
+  display: flex;
+  align-items: center;
+  gap: 2px; /* Reduce this value to move the label closer to the arrow */
+  flex-direction: row; /* Ensure horizontal layout */
+}
+
+.field-type-label {
+  order: 1; /* Make label appear first */
+  margin-left: 0; /* Remove negative margin */
+  font-size: 15px;
+  color: #f5f5f5;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.field-type-arrow-btn {
+  order: 2; /* Make arrow button appear second */
+  margin-right: 4px;
+  margin-left: 4px; /* Add left margin to create space after label */
+}
+
+.field-type-indicator {
+  order: 3; /* Make indicator appear third */
+}
+.field-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.field-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+
+.field-name-input,
+.field-instruction-input {
+  background: #232323;
+  color: #f5f5f5;
+  border: 1px solid #333;
+  border-radius: 4px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+  padding: 8px 12px;
+}
+.field-name-input:focus,
+.field-instruction-input:focus {
+  border-color: #90caf9;
+}
+.field-name-input::placeholder,
+.field-instruction-input::placeholder {
+  color: #888;
+}
+.toggle-list-label {
+  margin-left: 2px;
+  font-size: 13px;
+  color: #bdbdbd;
+  user-select: none;
+}
+.toggle-list-button {
+  width: 36px;
+  height: 20px;
+  background-color: #232323;
+  border: none;
+  border-radius: 4px; 
+  cursor: pointer;
+  position: relative;
+  transition: background-color 0.2s linear;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 4px;
+  outline: none;
+  box-sizing: border-box;
+}
+.field-type-arrow-btn {
+  width: 24px;
+  height: 24px;
+  background: #232323;
+  border: none;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 6px;
+  cursor: pointer;
   padding: 0;
+  transition: background 0.2s;
+}
+.field-type-arrow-btn:hover {
+  background: #333;
+}
+.field-type-arrow-btn svg {
+  display: block;
+}
+
+
+.field-type-arrow-btn {
+  order: 2;
+  margin-right: 4px;
+}
+
+.field-type-indicator {
+  order: 3;
+}
+
+.field-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.field-name-input,
+.field-instruction-input {
+  background: #232323;
+  color: #f5f5f5;
+  border: 1px solid #333;
+  border-radius: 4px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+  padding: 8px 12px;
+}
+.field-name-input:focus,
+.field-instruction-input:focus {
+  border-color: #90caf9;
+}
+.field-name-input::placeholder,
+.field-instruction-input::placeholder {
+  color: #888;
+}
+.toggle-list-label {
+  margin-left: 2px;
+  font-size: 13px;
+  color: #bdbdbd;
+  user-select: none;
+}
+.toggle-list-button {
+  width: 36px;
+  height: 20px;
+  background-color: #232323;
+  border: none;
+  border-radius: 4px; 
+  cursor: pointer;
+  position: relative;
+  transition: background-color 0.2s linear;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 4px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+
+.action-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid #333;
+  border-radius: 4px;
+  background-color: #232323;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  color: #bdbdbd;
+}
+.action-button:hover {
+  background-color: #333;
+}
+.action-button span {
+  font-size: 16px;
+  line-height: 1;
+  color: #bdbdbd;
+}
+.add-button span {
+  font-weight: bold;
+}
+.help-button span {
+  font-weight: normal;
+  font-style: italic;
+}
+.delete-button:hover {
+  background-color: #3a2323;
+}
+.delete-button:hover span {
+  color: #ff5252;
+}
+.more-options-container {
+  position: relative;
+}
+.more-button span {
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 0.5;
+}
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: #232323;
+  border: 1px solid #333;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  padding: 2px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 90px;  
+  width: 110px;     
+}
+.dropdown-menu button {
+  width: 100%;
+  padding: 6px 8px;    
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  font-size: 13px;    
+  color: #f5f5f5;
+}
+.dropdown-menu .action-button {
   margin: 0;
 }
+.dropdown-menu button {
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px;
+  color: #f5f5f5;
+  display: flex;
+  align-items: center;
+  gap: 8px;           
+}
+.action-button span {
+  font-size: 16px;
+  line-height: 1;
+  color: #bdbdbd;
+  display: flex;
+  align-items: center;
+  vertical-align: middle;
+}
+.dropdown-action-label {
+  margin-left: 10px;
+  font-size: 11px;
+  color: #f5f5f5;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  vertical-align: middle;
+  display: flex;
+  align-items: center;
+}
+.dropdown-menu button:hover {
+  background-color: #333;
+}
 
-.detached-object-container {
-  margin-top: 12px;
-  border: 1px solid #333;
+.value-type-popover {
+  position: absolute;
+  background: #181818;
   border-radius: 8px;
-  padding: 12px;
+  box-shadow: 0 8px 32px 0 rgba(0,0,0,0.65), 0 2px 12px 0 rgba(0,0,0,0.45); 
+  width: 130px; 
+  z-index: 1000;
+  padding: 2px; 
+  border: 1px solid #333;
+  color: #fff;
+}
+.popover-title {
+  font-size: 13px; 
+  font-weight: 500;
+  color: #f5f5f5;
+  margin-bottom: 6px; 
+}
+.type-option {
+  display: flex;
+  align-items: center;
+  padding: 5px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-bottom: 1px; 
+  transition: filter 0.2s, background 0.2s;
+  background: #181818;
+  color: #fff;
+  font-size: 13px; 
+  min-height: 28px; 
+}
+.type-icon {
+  margin-right: 6px; 
+  font-size: 15px; 
+}
+.type-label {
+  font-size: 13px; 
+  color: #f5f5f5;
+}
+.nested-fields {
+  width: 100%;
+  margin-bottom: 16px;
+  padding: 16px;
+  background: #181818;
+  border-radius: 6px;
+  box-sizing: border-box;
+  position: relative;
+}
+.empty-nested-state {
+  color: #888;
+  font-size: 14px;
+  padding: 8px 0;
+}
+.bottom-actions {
+  display: flex;
+  gap: 8px; 
+  margin-top: 8px;
+}
+.nested-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+.input-text-area {
+  width: 100%;
+  border: 1px solid #333;
+  border-radius: 6px;
+  padding: 8px;
+  box-sizing: border-box;
+  resize: vertical;
+  font-family: inherit;
+  font-size: 14px;
   background: #232323;
+  color: #f5f5f5;
+}
+.input-text-area:focus {
+  outline: none;
+  border-color: #90caf9;
+}
+.empty-state {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  color: #888;
+  font-size: 16px;
+  font-style: italic;
+  padding-left: 8px;
+  background: #232323;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+.type-dropdown-button {
+  background: none;
+  border: none;
+  padding: 0 4px 0 0;
+  margin-right: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: #bdbdbd;
+}
+.type-dropdown-icon {
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+}
+.value-type-divider {
+  height: 1px;
+  background: #333;
+  margin: 0 0 0 0;
+  border: none;
+  width: 100%;
+  opacity: 1; 
+}
+.type-option:hover {
+  background: #232323;
+  color: #90caf9;
+}
+.dropdown-action-label {
+  margin-left: 10px;      
+  font-size: 11px;        
+  color: #f5f5f5;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  vertical-align: middle;
 }
 
-.detached-object-fields {
-  margin-top: 12px;
+.field-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.detached-object .field-container {
-  margin-bottom: 12px;
+.field-name-input,
+.field-instruction-input {
+  background: #232323;
+  color: #f5f5f5;
+  border: 1px solid #333;
+  border-radius: 4px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+  padding: 8px 12px;
+}
+.field-name-input:focus,
+.field-instruction-input:focus {
+  border-color: #90caf9;
+}
+.field-name-input::placeholder,
+.field-instruction-input::placeholder {
+  color: #888;
+}
+.toggle-list-label {
+  margin-left: 2px;
+  font-size: 13px;
+  color: #bdbdbd;
+  user-select: none;
+}
+.toggle-list-button {
+  width: 36px;
+  height: 20px;
+  background-color: #232323;
+  border: none;
+  border-radius: 4px; 
+  cursor: pointer;
+  position: relative;
+  transition: background-color 0.2s linear;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 4px;
+  outline: none;
+  box-sizing: border-box;
+}
+.field-type-arrow-btn {
+  width: 24px;
+  height: 24px;
+  background: #232323;
+  border: none;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 6px;
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.2s;
+}
+.field-type-arrow-btn:hover {
+  background: #333;
+}
+.field-type-arrow-btn svg {
+  display: block;
+}
+
+
+.field-type-arrow-btn {
+  order: 2;
+  margin-right: 4px;
+}
+
+.field-type-indicator {
+  order: 3;
+}
+
+.field-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.field-name-input,
+.field-instruction-input {
+  background: #232323;
+  color: #f5f5f5;
+  border: 1px solid #333;
+  border-radius: 4px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+  padding: 8px 12px;
+}
+.field-name-input:focus,
+.field-instruction-input:focus {
+  border-color: #90caf9;
+}
+.field-name-input::placeholder,
+.field-instruction-input::placeholder {
+  color: #888;
+}
+.toggle-list-label {
+  margin-left: 2px;
+  font-size: 13px;
+  color: #bdbdbd;
+  user-select: none;
+}
+.toggle-list-button {
+  width: 36px;
+  height: 20px;
+  background-color: #232323;
+  border: none;
+  border-radius: 4px; 
+  cursor: pointer;
+  position: relative;
+  transition: background-color 0.2s linear;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 4px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+
+.action-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid #333;
+  border-radius: 4px;
+  background-color: #232323;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  color: #bdbdbd;
+}
+.action-button:hover {
+  background-color: #333;
+}
+.action-button span {
+  font-size: 16px;
+  line-height: 1;
+  color: #bdbdbd;
+}
+.add-button span {
+  font-weight: bold;
+}
+.help-button span {
+  font-weight: normal;
+  font-style: italic;
+}
+.delete-button:hover {
+  background-color: #3a2323;
+}
+.delete-button:hover span {
+  color: #ff5252;
+}
+.more-options-container {
+  position: relative;
+}
+.more-button span {
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 0.5;
+}
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: #232323;
+  border: 1px solid #333;  border-radius: 4px;
+  box-shadow: 0 8px 32px 0 rgba(0,0,0,0.65), 0 2px 12px 0 rgba(0,0,0,0.45); 
+  z-index: 1000;
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 3px; 
+}
+.dropdown-menu .action-button {
+  margin: 0;
+}
+.dropdown-menu button {
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px;
+  color: #f5f5f5;
+}
+.dropdown-menu button .dropdown-action-label {
+  margin-left: 8px; 
+}
+
+.dropdown-menu button.delete-button span:first-child {
+  margin-left: 0px; 
+  margin-right: 0px; 
+}
+.dropdown-menu button:hover {
+  background-color: #333;
+}
+
+.popover-title {
+  font-size: 13px; 
+  font-weight: 500;
+  color: #f5f5f5;
+  margin-bottom: 6px;
+}
+.type-option {
+  display: flex;
+  align-items: center;
+  padding: 5px 8px; 
+  border-radius: 6px;
+  cursor: pointer;
+  margin-bottom: 1px;
+  transition: filter 0.2s, background 0.2s;
+  background: #181818;
+  color: #fff;
+  font-size: 13px; 
+  min-height: 28px; 
+}
+.type-icon {
+  margin-right: 6px; 
+  font-size: 15px;
+}
+.type-label {
+  font-size: 13px; 
+  color: #f5f5f5;
+}
+.nested-fields {
+  width: 100%;
+  margin-bottom: 16px;
+  padding: 16px;
+  background: #181818;
+  border-radius: 6px;
+  box-sizing: border-box;
+  position: relative;
+}
+.empty-nested-state {
+  color: #888;
+  font-size: 14px;
+  padding: 8px 0;
+}
+.bottom-actions {
+  display: flex;
+  gap: 8px; 
+  margin-top: 8px;
+}
+.nested-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+.input-text-area {
+  width: 100%;
+  border: 1px solid #333;
+  border-radius: 6px;
+  padding: 8px;
+  box-sizing: border-box;
+  resize: vertical;
+  font-family: inherit;
+  font-size: 14px;
+  background: #232323;
+  color: #f5f5f5;
+}
+.input-text-area:focus {
+  outline: none;
+  border-color: #90caf9;
+}
+.empty-state {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  color: #888;
+  font-size: 16px;
+  font-style: italic;
+  padding-left: 8px;
+  background: #232323;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+.type-dropdown-button {
+  background: none;
+  border: none;
+  padding: 0 4px 0 0;
+  margin-right: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: #bdbdbd;
+}
+.type-dropdown-icon {
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+}
+.value-type-divider {
+  height: 1px;
+  background: #333;
+  margin: 0 0 0 0; 
+  border: none;
+  width: 100%;
+  opacity: 1; 
+}
+.type-option:hover {
+  background: #232323;
+  color: #90caf9;
+}
+.dropdown-action-label {
+  margin-left: 10px;      
+  font-size: 11px;        
+  color: #f5f5f5;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  vertical-align: middle;
+}
+
+.field-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.field-name-input,
+.field-instruction-input {
+  background: #232323;
+  color: #f5f5f5;
+  border: 1px solid #333;
+  border-radius: 4px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+  padding: 8px 12px;
+}
+.field-name-input:focus,
+.field-instruction-input:focus {
+  border-color: #90caf9;
+}
+.field-name-input::placeholder,
+.field-instruction-input::placeholder {
+  color: #888;
+}
+.toggle-list-label {
+  margin-left: 2px;
+  font-size: 13px;
+  color: #bdbdbd;
+  user-select: none;
+}
+.toggle-list-button {
+  width: 36px;
+  height: 20px;
+  background-color: #232323;
+  border: none;
+  border-radius: 4px; 
+  cursor: pointer;
+  position: relative;
+  transition: background-color 0.2s linear;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 4px;
+  outline: none;
+  box-sizing: border-box;
+}
+.field-type-arrow-btn {
+  width: 24px;
+  height: 24px;
+  background: #232323;
+  border: none;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 6px;
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.2s;
+}
+.field-type-arrow-btn:hover {
+  background: #333;
+}
+.field-type-arrow-btn svg {
+  display: block;
+}
+
+
+.field-type-arrow-btn {
+  order: 2;
+  margin-right: 4px;
+}
+
+.field-type-indicator {
+  order: 3;
+}
+
+.field-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.field-name-input,
+.field-instruction-input {
+  background: #232323;
+  color: #f5f5f5;
+  border: 1px solid #333;
+  border-radius: 4px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+  padding: 8px 12px;
+}
+.field-name-input:focus,
+.field-instruction-input:focus {
+  border-color: #90caf9;
+}
+.field-name-input::placeholder,
+.field-instruction-input::placeholder {
+  color: #888;
+}
+.toggle-list-label {
+  margin-left: 2px;
+  font-size: 13px;
+  color: #bdbdbd;
+  user-select: none;
+}
+.toggle-list-button {
+  width: 36px;
+  height: 20px;
+  background-color: #232323;
+  border: none;
 }
