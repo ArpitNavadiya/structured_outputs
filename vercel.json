@@ -5,8 +5,8 @@
       "src": "package.json",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "build",
-        "buildCommand": "npm run build"
+        "distDir": "bypass-static",
+        "buildCommand": "npm run build-bypass"
       }
     }
   ],
