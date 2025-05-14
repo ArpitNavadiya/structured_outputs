@@ -109,10 +109,10 @@ const FieldInput = ({ field, onChange, onDuplicate, onDelete, onToggleList, onTy
   const handleKeyDown = (e, fieldId, fieldName) => {
     if (e.key === 'Enter' && field.type === 'object' && fieldName.trim() !== '') {
       e.preventDefault();
-      
+
       // Construct the full hierarchy path without duplications
       let hierarchyPath = '';
-      
+
       // Check if parent name is already in the path
       if (field.hierarchyPath) {
         const pathParts = field.hierarchyPath.split(' → ');
@@ -124,7 +124,7 @@ const FieldInput = ({ field, onChange, onDuplicate, onDelete, onToggleList, onTy
       } else if (field.name) {
         hierarchyPath = field.name;
       }
-      
+
       const newNestedObject = { 
         id: Date.now(),
         type: 'object',
@@ -138,7 +138,7 @@ const FieldInput = ({ field, onChange, onDuplicate, onDelete, onToggleList, onTy
         hierarchyPath: hierarchyPath,
         isList: field.isList // Pass the list state to the new object
       };
-      
+
       // Only add an item field if it's a list but DON'T make it an object type 
       // to prevent double nesting
       if (field.isList) {
@@ -147,12 +147,13 @@ const FieldInput = ({ field, onChange, onDuplicate, onDelete, onToggleList, onTy
           type: 'text', // Changed from 'object' to 'text' to avoid double nesting
           name: 'item',
           instruction: '',
+
           parentId: newNestedObject.id,
           source: 'value',
           showSingleField: true
         }];
       }
-      
+
       // Signal to parent component to add this as a new top-level field
       if (typeof onChange === 'function') {
         onChange('newObject', newNestedObject);
@@ -212,7 +213,7 @@ const FieldInput = ({ field, onChange, onDuplicate, onDelete, onToggleList, onTy
         displayName = cleanPath;
       }
     }
-    
+
     return (
       <div className="field-input-container detached-object">
         <div className="object-field-header">
@@ -222,8 +223,8 @@ const FieldInput = ({ field, onChange, onDuplicate, onDelete, onToggleList, onTy
       </div>
     );
   }
-  
-  
+
+
 
   return (
     <div className="field-input-container">
@@ -254,6 +255,10 @@ const FieldInput = ({ field, onChange, onDuplicate, onDelete, onToggleList, onTy
               </svg>
             </span>
           </button>
+
+
+
+
         </div>
         <div className="field-header-actions">
           <span className="toggle-list-label">List</span>
@@ -331,7 +336,7 @@ const Test = ({ initialValue = '', onChange }) => {
   const [showTypePopover, setShowTypePopover] = useState(false);
   const [popoverPosition, setPopoverPosition] = useState({ x: 0, y: 0 });
   const [currentFieldId, setCurrentFieldId] = useState(null);
-  
+
   const [showLogicPopover, setShowLogicPopover] = useState(false);
   const [typePopoverFieldId, setTypePopoverFieldId] = useState(null);
   const [activeParentId, setActiveParentId] = useState(null);
@@ -467,13 +472,13 @@ const duplicateField = (id) => {
   };
 
   const fieldToDuplicate = findFieldRecursively(fields, id);
-  
+
   if (fieldToDuplicate) {
     const duplicatedField = {
       ...JSON.parse(JSON.stringify(fieldToDuplicate)),
       id: Date.now()
     };
-    
+
     if (fieldToDuplicate.parentId) {
       setFields(prevFields => {
         const updateFieldsRecursively = (fields) => {
@@ -545,10 +550,10 @@ const handleDeleteField = (id) => {
         return field;
       });
     };
-    
+
     const updatedFields = updateFieldsRecursively(fields);
     setFields(updatedFields);
-    
+
     if (onChange) {
       onChange(updatedFields);
     }
@@ -559,7 +564,7 @@ const handleDeleteField = (id) => {
       field.id === id ? { ...field, ...updatedField } : field
     );
     setFields(updatedFields);
-    
+
     if (onChange) {
       onChange(updatedFields);
     }
@@ -574,7 +579,7 @@ const handleDeleteField = (id) => {
 
   const handleAddNestedObject = (parentId = null) => {
     let hierarchyPath = "";
-    
+
     // Find parent with hierarchy path if parentId exists
     if (parentId) {
       const findParentRecursively = (fields, id) => {
@@ -588,12 +593,14 @@ const handleDeleteField = (id) => {
           }
           if (field.fields && field.fields.length > 0) {
             const found = findParentRecursively(field.fields, id);
+
+
             if (found) return found;
           }
         }
         return null;
       };
-      
+
       const parent = findParentRecursively(fields, parentId);
       if (parent) {
         // Check to prevent duplicate names in the path
@@ -610,7 +617,7 @@ const handleDeleteField = (id) => {
         }
       }
     }
-  
+
     const newField = { 
       id: Date.now(),
       type: 'object',
@@ -622,18 +629,20 @@ const handleDeleteField = (id) => {
       source: 'value',
       showSingleField: true
     };
-  
+
+
+
     if (parentId) {
       const parentField = fields.find(field => field.id === parentId);
       if (parentField) {
         const currentNestingLevel = getNestingLevel(parentField);
-  
+
         if (currentNestingLevel >= 5) {
           alert("Maximum nesting level of 5 reached.");
           return;
         }
       }
-  
+
       // Add to nested fields - recursively update the fields structure
       setFields(prevFields => {
         const updateFieldsRecursively = (fields) => {
@@ -688,20 +697,23 @@ const handleDeleteField = (id) => {
       x: rect.left - 430, // Center the popover horizontally over the button
       y: rect.top + 10, // Position at the top of the button
     });
-    
+
     // Store the current field ID for later use when a type is selected
     setCurrentFieldId(fieldId);
-    
+
     // Show the type popover
     setShowTypePopover(true);
   };
 
   const renderField = (field) => {
+    // Helper to create a clean display name with hierarchy
     const getCleanDisplayName = (field) => {
       if (!field.type === 'object' || !field.name) return field.name || '';
       
+      // If no hierarchy path, just return the name
       if (!field.hierarchyPath) return field.name;
       
+      // Clean the path and check if field name is already at the end
       const cleanPath = field.hierarchyPath.split(' → ')
         .filter((name, index, array) => array.indexOf(name) === index)
         .join(' → ');
@@ -761,89 +773,44 @@ const handleDeleteField = (id) => {
   };
 
   return (
-    <div className="structured-output-wrapper">
-      <div className="structured-generation">
-        {showEmptyState ? (
-          <div className="empty-state">Click + to add a field</div>
-        ) : null}
-        {fields.map((field) => (
-          <div key={field.id} className="field-container">
-            <FieldInput
-              field={field}
-              onChange={handleFieldChange}
-              onDuplicate={duplicateField}
-              onDelete={handleDeleteField}
-              onToggleList={handleToggleList}
-              onTypeArrowClick={(e) => {
-                const rect = e.currentTarget.getBoundingClientRect();
-                setPopoverPosition({
-                  x: rect.left,
-                  y: rect.bottom
-                });
-                setCurrentFieldId(field.id);
-                setShowTypePopover(true);
-              }}
-            />
-          </div>
-        ))}
-        <button
-          className="action-button add-button"
-          onClick={(e) => handleAddClick(e)}
-          title="Add field"
-        >
-          <span>+</span>
-        </button>
+    <div className="structured-generation">
+      <div className="fields-container">
+        {fields.length === 0 && (
+          <div className="empty-state">No fields</div>
+        )}
+        {fields.map(field => renderField(field))}
+        <div className="bottom-actions">
+          <button 
+            className="action-button add-button"
+            onClick={handleAddClick}
+            title="Add field"
+          >
+            <span>+</span>
+          </button>
+          <button 
+            className="action-button add-object-button"
+            onClick={() => handleAddNestedObject()}
+            title="Add nested object"
+          >
+            <span>{'{+}'}</span>
+          </button>
+          {/* Removed the third button */}
+        </div>
       </div>
-
-      {/* Nested Objects Section - Moved outside structured-generation */}
-      <div className="nested-objects-section">
-        <h3 className="nested-objects-title">Nested Objects</h3>
-        {fields.map((field) => (
-          field.type === 'object' && (
-            <div key={`nested-${field.id}`} className="nested-fields">
-              {field.fields?.map((nestedField) => (
-                <FieldInput
-                  key={nestedField.id}
-                  field={nestedField}
-                  onChange={handleFieldChange}
-                  onDuplicate={duplicateField}
-                  onDelete={handleDeleteField}
-                  onToggleList={handleToggleList}
-                  onTypeArrowClick={(e) => {
-                    const rect = e.currentTarget.getBoundingClientRect();
-                    setPopoverPosition({
-                      x: rect.left,
-                      y: rect.bottom
-                    });
-                    setCurrentFieldId(nestedField.id);
-                    setShowTypePopover(true);
-                  }}
-                />
-              ))}
-              <button
-                className="action-button add-button"
-                onClick={(e) => handleAddClick(e, field.id)}
-                title="Add nested field"
-              >
-                <span>+</span>
-              </button>
-            </div>
-          )
-        ))}
-      </div>
-
+      {/* Value Type Popover */}
       {showTypePopover && (
         <ValueTypePopover
+          position={popoverPosition}
           onSelect={handleTypeSelect}
           onClose={() => setShowTypePopover(false)}
-          position={popoverPosition}
         />
       )}
+      {/* Logic Type Popover */}
       {showLogicPopover && (
         <LogicTypePopover
+          position={popoverPosition}
           onSelect={handleLogicTypeSelect}
           onClose={() => setShowLogicPopover(false)}
-          position={popoverPosition}
         />
       )}
     </div>
